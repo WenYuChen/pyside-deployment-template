@@ -1,7 +1,5 @@
 # PySide GUI
 
----
-
 A project architecture for developing PySide GUI which can generate executable and installer rapidly.
 
 ## Platform
