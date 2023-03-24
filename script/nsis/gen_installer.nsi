@@ -81,7 +81,6 @@ LangString LNG_IsExecuting ${LANG_ENGLISH} "is still running, please terminate t
 # 定義安裝流程
 # ----------------------------------------------------------------------
 Function .onInit
-    Call CheckIfProcessRunning
     !insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
 
@@ -110,7 +109,6 @@ SectionEnd
 # 定義解除安裝流程
 #----------------------------------------------------------------------
 Function un.onInit
-    Call un.CheckIfProcessRunning
     !insertmacro MUI_UNGETLANGUAGE
 FunctionEnd
 
@@ -126,27 +124,3 @@ Section "uninstall"
 
     SetAutoClose true
 SectionEnd
-
-
-#----------------------------------------------------------------------
-# Functions & Macros
-#----------------------------------------------------------------------
-!macro CheckIfProcessRunning.Macro un
-    Function ${un}CheckIfProcessRunning
-        !insertmacro CheckProcess "${STR_StartupApp}.exe" "${STR_StartupApp}.exe"
-    FunctionEnd
-!macroend
-
-!macro CheckProcess ProcessName DisplayName
-    nsProcess::_FindProcess "${ProcessName}"
-    Pop $R0
-    ${If} $R0 = 0
-        MessageBox MB_OK|MB_ICONEXCLAMATION "${DisplayName} $(LNG_IsExecuting)" /SD IDOK
-        Abort
-    ${EndIf}
-!macroend
-
-
-; Insert function as an installer and uninstaller function.
-!insertmacro CheckIfProcessRunning.Macro ""
-!insertmacro CheckIfProcessRunning.Macro "un."
